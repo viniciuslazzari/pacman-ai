@@ -150,7 +150,7 @@ def uniformCostSearch(problem):
 
         if state in visited:
             continue
-            
+
         visited.add(state)
 
         for successor, action, stepCost in problem.getSuccessors(state):
@@ -170,7 +170,28 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    start = problem.getStartState()
+    pq = util.PriorityQueue()
+    pq.push((start, [], 0), heuristic(start, problem))
+    visited = set()
+
+    while not pq.isEmpty():
+        state, path, cost = pq.pop()
+
+        if problem.isGoalState(state):
+            return path
+
+        if state in visited:
+            continue
+            
+        visited.add(state)
+
+        for successor, action, stepCost in problem.getSuccessors(state):
+            if successor not in visited:
+                newCost = cost + stepCost
+                pq.push((successor, path + [action], newCost), newCost + heuristic(successor, problem))
+
+    return []
 
 
 # Abbreviations
